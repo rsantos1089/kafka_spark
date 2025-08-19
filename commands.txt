@@ -1,0 +1,38 @@
+https://hub.docker.com/_/zookeeper/
+
+https://hub.docker.com/r/apache/kafka
+
+#add kafka jar
+docker build -t rsantos1089/spark:scala-2.13 .
+docker run --rm -it rsantos1089/spark:scala-2.13 sh
+
+#create kafka topic
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic topic-1
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic topic-1
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic-1 --from-beginning
+
+# check broker version
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-broker-api-versions.sh --bootstrap-server localhost:9092 --version
+# get clusterId
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-cluster.sh cluster-id --bootstrap-server localhost:9092
+# status metadata
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-metadata-quorum.sh --bootstrap-server  localhost:9092 describe --status
+
+docker exec -it postgres sh
+
+docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-topics.sh --bootstrap-server=localhost:9092 --list
+./kafka-topics.sh --bootstrap-server=localhost:9092 --describe --topic topic-1
+
+
+docker run --rm --network kafka_spark_kafka-spark-network -v C:/Users/ENRIQUE/PycharmProjects/kafka_spark/spark/scripts:/scripts rsantos1089/spark:scala-2.13 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13-4.0.0.jar /scripts/read_kafka_topic.py
+
+docker run --rm --network kafka_spark_kafka-spark-network -v C:/Users/ENRIQUE/PycharmProjects/kafka_spark/spark/scripts:/scripts rsantos1089/spark:scala-2.13 spark-submit /scripts/read_kafka_topic.py
+
+docker exec -it spark-master sh ./bin/spark-submit --conf spark.jars.ivy=/tmp/.ivy --conf mapreduce.job.user.name=spark --conf spark.mapreduce.job.user.name=spark /opt/bitnami/external_scripts/read_kafka_topic.py
+/opt/bitnami/spark/jars
+--conf mapreduce.job.user.name=spark \
+--conf spark.mapreduce.job.user.name=spark \
+
+docker run --rm -it rsantos1089/spark:scala-2.13 ls /opt/bitnami/spark/jars/ivy-2.5.3.jar
+docker run --rm rsantos1089/spark:scala-2.13 sh /opt/bitnami/spark/jars/ivy-2.5.3.jar
+docker run --rm -it rsantos1089/spark:scala-2.13 sh

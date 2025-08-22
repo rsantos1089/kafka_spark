@@ -24,11 +24,12 @@ docker exec --workdir /opt/kafka/bin/ -it broker sh ./kafka-topics.sh --bootstra
 ./kafka-topics.sh --bootstrap-server=localhost:9092 --describe --topic topic-1
 
 
-docker run --rm --network kafka_spark_kafka-spark-network -v C:/Users/ENRIQUE/PycharmProjects/kafka_spark/spark/scripts:/scripts rsantos1089/spark:scala-2.13 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13-4.0.0.jar /scripts/read_kafka_topic.py
-
 docker run --rm --network kafka_spark_kafka-spark-network -v C:/Users/ENRIQUE/PycharmProjects/kafka_spark/spark/scripts:/scripts rsantos1089/spark:scala-2.13 spark-submit /scripts/read_kafka_topic.py
 
 docker exec -it spark-master sh ./bin/spark-submit --conf spark.jars.ivy=/tmp/.ivy --conf mapreduce.job.user.name=spark --conf spark.mapreduce.job.user.name=spark /opt/bitnami/external_scripts/read_kafka_topic.py
+
+./bin/spark-submit --conf spark.jars.ivy=/tmp/.ivy /opt/bitnami/external_scripts/read_kafka_topic.py
+
 /opt/bitnami/spark/jars
 --conf mapreduce.job.user.name=spark \
 --conf spark.mapreduce.job.user.name=spark \
@@ -36,3 +37,8 @@ docker exec -it spark-master sh ./bin/spark-submit --conf spark.jars.ivy=/tmp/.i
 docker run --rm -it rsantos1089/spark:scala-2.13 ls /opt/bitnami/spark/jars/ivy-2.5.3.jar
 docker run --rm rsantos1089/spark:scala-2.13 sh /opt/bitnami/spark/jars/ivy-2.5.3.jar
 docker run --rm -it rsantos1089/spark:scala-2.13 sh
+
+docker exec -u root -it spark-master spark-submit --conf spark.jars.ivy=/opt/bitnami/spark/tmp/.ivy2 /opt/bitnami/external_scripts/read_kafka_topic.py
+
+
+docker exec -it spark-master sh su - spark -c "spark-submit --conf spark.jars.ivy=/opt/bitnami/spark/tmp/.ivy2 /opt/bitnami/external_scripts/read_kafka_topic.py"

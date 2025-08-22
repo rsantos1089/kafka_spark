@@ -47,13 +47,15 @@ try:
             time.sleep(INTERVAL)
         else :
             data = dict(zip(column_names,rows[i]))
+            key = str(data['id']).encode(encoding="utf-8")
             print(data)
-            producer.send(kafka_topic,value=data).add_callback(on_send_success).add_errback(on_send_error)
+            producer.send(kafka_topic,key=key,value=data).add_callback(on_send_success).add_errback(on_send_error)
 
     # Ensure all messages are sent
     producer.flush()
 except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error: {str(e)}")
+    raise
 finally:
     if cursor:
         cursor.close()

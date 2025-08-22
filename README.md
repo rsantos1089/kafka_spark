@@ -97,6 +97,15 @@ docker run --rm --network <network name> \
 rsantos1089/spark:scala-2.13 \
 spark-submit /scripts/read_kafka_topic.py
 ```
+
+or type the follow command
+
+```console
+docker exec -u root -it spark-master \
+spark-submit --conf spark.jars.ivy=/opt/bitnami/spark/tmp/.ivy2 \
+/opt/bitnami/external_scripts/read_kafka_topic.py
+```
+
 We can see the data
 
 ![topic_data](images/topic_data.png)

@@ -106,6 +106,6 @@ spark-submit --conf spark.jars.ivy=/opt/bitnami/spark/tmp/.ivy2 \
 /opt/bitnami/external_scripts/read_kafka_topic.py
 ```
 
-We can see the data
+We can see the data 
 
 ![topic_data](images/topic_data.png)
